@@ -2,7 +2,7 @@
 // 当前使用 Formspree 免费版作为后端
 // 替换下面的 FORM_ENDPOINT 为你自己的 Formspree 表单ID 或自建后端地址
 
-const FORM_ENDPOINT = 'https://formspree.io/f/YOUR_FORM_ID';
+const FORM_ENDPOINT = 'https://luck-proceed-touched-merge.trycloudflare.com/submit';
 
 document.getElementById('consult-form').addEventListener('submit', async function(e) {
   e.preventDefault();
@@ -15,7 +15,8 @@ document.getElementById('consult-form').addEventListener('submit', async functio
   const formData = {
     name: form.name.value.trim(),
     phone: form.phone.value.trim(),
-    idcard: form.idcard.value.trim() || '(未填写)',
+    idcard: form.idcard.value.trim(),
+    examid: form.examid.value.trim(),
     school: form.school.value.trim(),
     message: form.message.value.trim() || '(未填写)',
     submittedAt: new Date().toLocaleString('zh-CN')
@@ -34,6 +35,12 @@ document.getElementById('consult-form').addEventListener('submit', async functio
   }
   if (!/^\d{17}[\dXx]$/.test(formData.idcard)) {
     showResult('身份证号格式不正确，请检查（18位）', 'error');
+    return;
+  }
+
+  // 准考证号必填校验
+  if (!formData.examid || formData.examid.trim() === '') {
+    showResult('请填写高考准考证号（用于招生报名核验）', 'error');
     return;
   }
 

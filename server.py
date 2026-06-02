@@ -1,11 +1,22 @@
 #!/usr/bin/env python3
 """招生表单数据接收服务 - 数据存本地，不经过云端"""
 from flask import Flask, request, jsonify
-import json, os
+import json, os, time
 from datetime import datetime
 
 app = Flask(__name__)
 DATA_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'submissions.json')
+
+# IP提交频率限制: 60秒内同一IP只能提交一次
+rate_limit = {}
+
+def check_rate_limit(ip):
+    now = time.time()
+    if ip in rate_limit:
+        if now - rate_limit[ip] < 60:
+            return False, 60 - int(now - rate_limit[ip])
+    rate_limit[ip] = now
+    return True, 0
 
 def load_data():
     if not os.path.exists(DATA_FILE):
@@ -20,6 +31,11 @@ def save_data(entries):
 @app.route('/submit', methods=['POST'])
 def submit():
     try:
+        ip = request.remote_addr
+        allowed, wait = check_rate_limit(ip)
+        if not allowed:
+            return jsonify({'error': f'提交太频繁，请{wait}秒后再试'}), 429
+        
         data = request.get_json()
         required = ['name', 'phone', 'idcard', 'examid']
         for field in required:

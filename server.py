@@ -62,12 +62,28 @@ def submit():
         return jsonify({'error': str(e)}), 500
 
 VIEW_PASSWORD = 'xdd888'
+view_attempts = {}  # IP → (错误次数, 首次错误时间)
 
 @app.route('/view', methods=['GET'])
 def view():
-    """查看所有提交 - 需要密码"""
+    """查看所有提交 - 需要密码，防穷举"""
+    ip = request.remote_addr
+    now = time.time()
+    
+    # 5分钟内错误5次 → 封10分钟
+    if ip in view_attempts:
+        count, first = view_attempts[ip]
+        if count >= 5 and now - first < 600:
+            return '<h2>🚫 尝试次数过多，10分钟后再试</h2>', 429
+        if now - first > 300:  # 5分钟重置
+            view_attempts.pop(ip, None)
+    
     key = request.args.get('key', '')
     if key != VIEW_PASSWORD:
+        if ip in view_attempts:
+            view_attempts[ip] = (view_attempts[ip][0] + 1, view_attempts[ip][1])
+        else:
+            view_attempts[ip] = (1, now)
         html = '<html><head><meta charset="utf-8"><title>需要密码</title>'
         html += '<style>body{font-family:sans-serif;text-align:center;margin-top:80px}'
         html += 'input{padding:10px 16px;font-size:16px;border:1px solid #ccc;border-radius:6px}'

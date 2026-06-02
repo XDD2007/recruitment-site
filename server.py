@@ -21,7 +21,7 @@ def save_data(entries):
 def submit():
     try:
         data = request.get_json()
-        required = ['name', 'phone', 'idcard', 'examid', 'school']
+        required = ['name', 'phone', 'idcard', 'examid']
         for field in required:
             if not data.get(field, '').strip():
                 return jsonify({'error': f'必填字段缺失: {field}'}), 400

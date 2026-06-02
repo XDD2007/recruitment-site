@@ -207,9 +207,10 @@
       <p class="section-desc">
         我是本校在读学长，有任何关于学校、专业、校区的问题都可以问我。
       </p>
+
       <form id="consult-form" class="consult-form">
         <div class="form-group">
-          <label for="name">姓名 <span class="required">*必填</span></label>
+          <label for="name">姓名<span class="required">*必填</span></label>
           <input type="text" id="name" name="name" placeholder="请输入你的真实姓名" required>
         </div>
 
@@ -240,6 +241,10 @@
           <textarea id="message" name="message" rows="3" placeholder="比如：想了解计算机专业、济南和威海校区怎么选、宿舍有没有空调、专升本难不难..."></textarea>
         </div>
 
+        <p class="privacy-agree">
+          提交即表示同意<a href="#" onclick="showPrivacy();return false">隐私声明</a>：你的信息仅转交学校招生办，不会泄露。
+        </p>
+
         <button type="submit" class="btn-submit">提交咨询申请</button>
 
         <div id="form-result" class="form-result" style="display:none;"></div>
@@ -255,6 +260,17 @@
       <p class="footer-small">本站为在读学长个人搭建，收集的信息仅转交学校招生办，不会泄露或转卖。</p>
     </div>
   </footer>
+
+  <div id="privacy-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:9999;align-items:center;justify-content:center" onclick="if(event.target===this)this.style.display='none'">
+    <div style="background:#1a1a2e;color:#e0e0e0;max-width:500px;padding:30px;border-radius:12px;margin:20px">
+      <h3 style="color:#ff6b9d;margin-bottom:16px">🔒 隐私声明</h3>
+      <p style="line-height:1.8;margin-bottom:12px">本站为<strong>山东外事职业大学在读学长</strong>个人搭建的公益咨询平台。</p>
+      <p style="line-height:1.8;margin-bottom:12px">您提交的<strong>姓名、身份证号、准考证号</strong>等信息<strong style="color:#4ecdc4">仅用于转交学校招生办进行报名核验</strong>，不会用于任何商业用途。</p>
+      <p style="line-height:1.8;margin-bottom:12px">数据存储在独立服务器上，访问后台设有密码保护，不会出售或泄露给第三方。</p>
+      <p style="line-height:1.8;color:#888">如有疑问，请联系学长 QQ：794013379</p>
+      <button onclick="document.getElementById('privacy-modal').style.display='none'" style="margin-top:16px;padding:10px 30px;background:#2563eb;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:15px">我知道了</button>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>

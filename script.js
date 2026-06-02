@@ -77,6 +77,10 @@ function showResult(msg, type) {
 }
 
 // ====== 导航栏滚动阴影 ======
+function showPrivacy() {
+  document.getElementById('privacy-modal').style.display = 'flex';
+}
+
 window.addEventListener('scroll', function() {
   const navbar = document.getElementById('navbar');
   if (window.scrollY > 10) {

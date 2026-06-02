@@ -45,9 +45,22 @@ def submit():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+VIEW_PASSWORD = 'xdd888'
+
 @app.route('/view', methods=['GET'])
 def view():
-    """查看所有提交 - 本地访问用"""
+    """查看所有提交 - 需要密码"""
+    key = request.args.get('key', '')
+    if key != VIEW_PASSWORD:
+        html = '<html><head><meta charset="utf-8"><title>需要密码</title>'
+        html += '<style>body{font-family:sans-serif;text-align:center;margin-top:80px}'
+        html += 'input{padding:10px 16px;font-size:16px;border:1px solid #ccc;border-radius:6px}'
+        html += 'button{padding:10px 24px;font-size:16px;background:#2563eb;color:#fff;border:none;border-radius:6px;cursor:pointer}'
+        html += '</style></head><body>'
+        html += '<h2>🔒 需要访问密码</h2>'
+        html += '<form method="get"><input type="password" name="key" placeholder="请输入查看密码"><br><br><button type="submit">确认</button></form>'
+        html += '</body></html>'
+        return html, 403
     entries = load_data()
     html = '<html><head><meta charset="utf-8"><title>招生咨询 - 提交记录</title>'
     html += '<style>body{font-family:sans-serif;max-width:900px;margin:20px auto;padding:0 20px}'
